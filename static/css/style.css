@@ -1,0 +1,35 @@
+/* Custom styles for Hospital Management System */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.hero-image-placeholder {
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    border: 1px solid #7dd3fc;
+}
+
+.doctor-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.doctor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+/* Make alerts pop slightly */
+.alert {
+    border-left: 4px solid rgba(0,0,0,0.2);
+}
+
+/* Navbar enhancement */
+.navbar {
+    border-bottom: 3px solid #0284c7;
+}
+
+/* Card headers */
+.card-header {
+    border-bottom: 2px solid #f1f5f9;
+}

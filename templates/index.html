@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Hospital Management System{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mb-5 mt-4">
+    <div class="col-md-6">
+        <h1 class="display-4 fw-bold text-primary mb-3">Your Health is Our Top Priority</h1>
+        <p class="lead text-muted mb-4">We provide state-of-the-art medical services with top-tier professionals. Book your appointment today and experience healthcare like never before.</p>
+        {% if not session_username %}
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg me-2 shadow">Get Started</a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-lg shadow-sm">Login</a> <br>
+            <br>
+        {% elif session_role == 'Patient' %}
+            <a href="{{ url_for('patient.book_appointment') }}" class="btn btn-success btn-lg shadow">Book Appointment</a>
+        {% endif %}
+    </div>
+    <div class="col-md-6 text-center">
+        <!-- Placeholder for hero image -->
+        <div class="hero-image-placeholder bg-light rounded shadow-sm d-flex align-items-center justify-content-center p-5" style="height: 350px;">
+            <i class="fa-solid fa-user-doctor fa-5x text-primary opacity-50"></i>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col-12 text-center mb-4">
+        <h2 class="fw-bold">Our Top Specialists</h2>
+        <div class="divider mx-auto bg-primary" style="width: 60px; height: 3px;"></div>
+    </div>
+    <style>
+.doctor-card {
+    transition: 0.3s;
+}
+.doctor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+</style>
+    
+    {% if doctors %}
+        {% for doc in doctors %}
+        <div class="col-md-5 mb-4">
+            <div class="card shadow-sm h-100 border-0 doctor-card transition-all">
+                <div class="card-body text-center p-4">
+                  <img src="{{ url_for('static', filename='images/staff/' + (doc.image if doc.image else 'default.png')) }}" alt="{{ doc.name }}" class="img-fluid rounded-4 mb-2" style="width:200px; height:200px; object-fit:cover;">
+     <h5 class="card-title fw-bold">{{ doc.name }}</h5>
+                    <p class="card-text text-muted">{{ doc.specialization }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12 text-center text-muted">
+            <p>Our specialists will be listed here soon.</p>
+        </div>
+    {% endif %}
+</div>
+
+<div class="row bg-light rounded p-5 shadow-sm">
+    <div class="col-md-4 text-center mb-4 mb-md-0">
+        <i class="fa-solid fa-phone fa-3x text-primary mb-3"></i>
+        <h4>Emergency Contact</h4>
+        <p class="lead text-muted">+91 9486608171-EMERGENCY</p>
+    </div>
+    <div class="col-md-4 text-center mb-4 mb-md-0 border-start border-end">
+        <i class="fa-solid fa-location-dot fa-3x text-primary mb-3"></i>
+        <h4>Location</h4>
+        <p class="text-muted">12a, Health Avenue<br>Palayamkottai, Thirunelveli,<br> TN 621002</p>
+    </div>
+    <div class="col-md-4 text-center">
+        <i class="fa-solid fa-clock fa-3x text-primary mb-3"></i>
+        <h4>Working Hours</h4>
+        <p class="text-muted">24/7 Emergency Care<br>OPD: 9 AM - 6 PM</p>
+    </div>
+</div>
+{% endblock %}

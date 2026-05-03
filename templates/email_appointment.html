@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { background-color: #0d6efd; color: white; padding: 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 24px; }
+        .content { padding: 30px; color: #333333; line-height: 1.6; }
+        .status-badge { display: inline-block; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; margin: 15px 0; }
+        .status-Accepted { background-color: #d1e7dd; color: #0f5132; }
+        .status-Rejected { background-color: #f8d7da; color: #842029; }
+        .footer { background-color: #f1f1f1; text-align: center; padding: 15px; font-size: 12px; color: #666666; }
+        .details-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .details-table th, .details-table td { padding: 10px; border-bottom: 1px solid #eeeeee; text-align: left; }
+        .details-table th { color: #555555; width: 40%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Hospital Management System</h1>
+        </div>
+        <div class="content">
+            <p>Dear <strong>{{ patient_name }}</strong>,</p>
+            <p>Your appointment status has been updated by the doctor. Please see the details below:</p>
+            
+            <div style="text-align: center;">
+                <div class="status-badge status-{{ status }}">Status: {{ status }}</div>
+            </div>
+
+            <table class="details-table">
+                <tr>
+                    <th>Doctor:</th>
+                    <td>Dr. {{ doctor_name }}</td>
+                </tr>
+                <tr>
+                    <th>Appointment Date:</th>
+                    <td>{{ appointment_date }}</td>
+                </tr>
+            </table>
+
+            {% if status == 'Accepted' %}
+            <p style="margin-top: 20px;">Please arrive 15 minutes prior to your appointment time. If you have any questions, feel free to contact our support team.</p>
+            {% elif status == 'Rejected' %}
+            <p style="margin-top: 20px;">We apologize, but the doctor is unable to see you at this time. Please log in to your dashboard to reschedule your appointment.</p>
+            {% endif %}
+            
+            <p>Best regards,<br>HMS Medical Team</p>
+        </div>
+        <div class="footer">
+            &copy; 2026 Hospital Management System. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>

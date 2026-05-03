@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Doctor Dashboard - HMS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+    <h2><i class="fa-solid fa-user-md text-primary me-2"></i>Doctor Dashboard</h2>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white pt-4 pb-2 border-0">
+        <h5 class="fw-bold"><i class="fa-solid fa-calendar-check text-info me-2"></i>My Appointments</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Patient Name</th>
+                        <th>Phone</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tbody>
+{% for a in appointments %}
+    <tr>
+        <td>{{ a.appointment_date }}</td>
+        <td class="fw-bold">{{ a.patient_name }}</td>
+        <td>{{ a.phone }}</td>
+        <td>{{ a.reason }}</td>
+
+        <td>
+            <span class="badge bg-{{ 'warning' if a.status == 'Pending' else 'success' if a.status == 'Accepted' else 'danger' if a.status == 'Rejected' else 'primary' }}">
+                {{ a.status }}
+            </span>
+        </td>
+
+        <td>
+            {% if a.status == 'Completed' %}
+                <span class="text-success fw-bold"><i class="fa-solid fa-check-circle me-1"></i>Completed</span>
+            {% else %}
+                <form method="POST" action="{{ url_for('doctor.update_appointment', id=a.id) }}" class="d-inline">
+                    {% if a.status != 'Accepted' %}
+                    <button type="submit" name="status" value="Accepted" class="btn btn-sm btn-success">Accept</button>
+                    {% endif %}
+                    {% if a.status != 'Rejected' %}
+                    <button type="submit" name="status" value="Rejected" class="btn btn-sm btn-danger">Reject</button>
+                    {% endif %}
+                </form>
+            {% endif %}
+        </td>
+    </tr>
+
+{% else %}
+    <tr>
+        <td colspan="6" class="text-center text-muted">No appointments found.</td>
+    </tr>
+{% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

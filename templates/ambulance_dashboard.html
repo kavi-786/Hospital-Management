@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Ambulance Dashboard - HMS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+    <h2><i class="fa-solid fa-truck-medical text-danger me-2"></i>Ambulance Dispatch</h2>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white pt-4 pb-2 border-0">
+        <h5 class="fw-bold"><i class="fa-solid fa-bell text-warning me-2"></i>Emergency Requests</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Time</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in requests %}
+                    <tr>
+                        <td>{{ r.created_at }}</td>
+                        <td class="fw-bold">{{ r.location }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'danger' if r.status == 'Pending' else 'warning' if r.status == 'Dispatched' else 'success' }}">
+                                {{ r.status }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if r.status != 'Resolved' %}
+                            <form method="POST" action="{{ url_for('staff.update_ambulance_status', id=r.id) }}" class="d-inline">
+                                <select name="status" class="form-select form-select-sm d-inline w-auto me-1" onchange="this.form.submit()">
+                                    <option value="Pending" {% if r.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                    <option value="Dispatched" {% if r.status == 'Dispatched' %}selected{% endif %}>Dispatched</option>
+                                    <option value="Resolved" {% if r.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                                </select>
+                            </form>
+                            {% else %}
+                            <span class="text-success"><i class="fa-solid fa-check-circle"></i> Completed</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">No active emergency requests.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

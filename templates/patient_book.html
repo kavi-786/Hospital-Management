@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment - HMS{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 mt-4">
+            <div class="card-header bg-white pt-4 pb-2 border-0 text-center">
+                <i class="fa-solid fa-calendar-plus fa-3x text-primary mb-3"></i>
+                <h4 class="fw-bold">Book an Appointment</h4>
+            </div>
+            <div class="card-body bg-light p-4">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Select Doctor</label>
+                        <select name="doctor_id" class="form-select" required>
+                            <option value="">-- Choose Doctor --</option>
+                            {% for d in doctors %}
+                                <option value="{{ d.id }}">Dr. {{ d.name }} ({{ d.specialization }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Preferred Date & Time</label>
+                        <input type="datetime-local" name="date" class="form-control" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Blood Group</label>
+                            <select name="blood_group" class="form-select" required>
+                                <option value="">-- Select Blood Group --</option>
+                                {% for bg in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] %}
+                                    <option value="{{ bg }}" {% if patient_info.blood_group == bg %}selected{% endif %}>{{ bg }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Address</label>
+                            <input type="text" name="address" class="form-control" value="{{ patient_info.address or '' }}" required placeholder="123 Main St...">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Reason for Visit</label>
+                        <textarea name="reason" rows="3" class="form-control" required placeholder="Please describe your symptoms..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow-sm">Request Appointment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dateInput = document.querySelector('input[name="date"]');
+        if (dateInput) {
+            const now = new Date();
+            now.setHours(now.getHours() + 6);
+            
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+            dateInput.setAttribute('min', minDateTime);
+        }
+    });
+</script>
+{% endblock %}

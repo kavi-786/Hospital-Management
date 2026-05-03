@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Nurse Dashboard - HMS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+    <h2><i class="fa-solid fa-user-nurse text-primary me-2"></i>Nurse Dashboard</h2>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white pt-4 pb-2 border-0">
+        <h5 class="fw-bold"><i class="fa-solid fa-calendar-check text-success me-2"></i>All Hospital Appointments</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Patient Name</th>
+                        <th>Contact Info</th>
+                        <th>Blood Group</th>
+                        <th>Address</th>
+                        <th>Assigned Doctor</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in appointments %}
+                    <tr>
+                        <td>{{ a.appointment_date }}</td>
+                        <td class="fw-bold">{{ a.patient_name }}</td>
+                        <td>
+                            <div><i class="fa-solid fa-envelope text-muted me-1"></i> {{ a.email or 'N/A' }}</div>
+                            <div><i class="fa-solid fa-phone text-muted me-1"></i> {{ a.phone or 'N/A' }}</div>
+                        </td>
+                        <td>{{ a.blood_group or 'N/A' }}</td>
+                        <td>{{ a.address or 'N/A' }}</td>
+                        <td>Dr. {{ a.doctor_name }} <span class="text-muted small">({{ a.specialization }})</span></td>
+                        <td>{{ a.reason }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'warning' if a.status == 'Pending' else 'success' if a.status == 'Accepted' else 'danger' if a.status == 'Rejected' else 'primary' }}">
+                                {{ a.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">No appointments found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
