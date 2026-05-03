@@ -4,10 +4,10 @@ class Config:
     SECRET_KEY = "a9f3K!x2@Pq8Zz91Lm"
 
     
-    MYSQL_HOST = os.environ.get('MYSQL_HOST') or 'if0_41821364_hospital_db'
-    MYSQL_USER = os.environ.get('MYSQL_USER') or 'sql102.infinityfree.com'
+    MYSQL_HOST = mysql.railway.internal
+    MYSQL_USER = root
     MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD') 
-    MYSQL_DB = os.environ.get('MYSQL_DB') 
+    MYSQL_DB = railway
 
     
     MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'smtp.gmail.com'
