@@ -4,8 +4,8 @@ class Config:
     SECRET_KEY = "a9f3K!x2@Pq8Zz91Lm"
 
     
-    MYSQL_HOST = os.environ.get('MYSQL_HOST')
-    MYSQL_USER = os.environ.get('MYSQL_USER') 
+    MYSQL_HOST = os.environ.get('MYSQL_HOST') or 'if0_41821364_hospital_db'
+    MYSQL_USER = os.environ.get('MYSQL_USER') or 'sql102.infinityfree.com'
     MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD') 
     MYSQL_DB = os.environ.get('MYSQL_DB') 
 
