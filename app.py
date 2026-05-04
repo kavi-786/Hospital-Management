@@ -2,6 +2,7 @@ from flask import Flask, render_template, session, g
 import pymysql
 import pymysql.cursors
 from config import Config
+import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -89,5 +90,5 @@ def page_not_found(e):
     return render_template("404.html"), 404
     
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT"))
+    port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
