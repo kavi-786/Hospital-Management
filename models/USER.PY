@@ -7,10 +7,17 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    role = db.Column(db.Enum('Admin', 'Doctor', 'Nurse', 'Ambulance', 'Store', 'Patient'), nullable=False)
+    role = db.Column(
+        db.Enum('Admin', 'Doctor', 'Nurse', 'Ambulance', 'Store', 'Patient'),
+        nullable=False
+    )
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100))
     phone = db.Column(db.String(20))
+
+    # ✅ ADD THIS LINE (IMPORTANT)
+    image = db.Column(db.String(255))
+
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Relationships
