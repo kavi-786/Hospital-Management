@@ -1,8 +1,8 @@
+import os
 from flask import Flask, render_template, session, g
 import pymysql
 import pymysql.cursors
 from config import Config
-import os
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -21,7 +21,7 @@ def get_db_connection():
             user=app.config['MYSQL_USER'],
             password=app.config['MYSQL_PASSWORD'],
             db=app.config['MYSQL_DB'],
-            port=3306,
+            port=app.config.get('MYSQL_PORT', 3306),
             cursorclass=pymysql.cursors.DictCursor,
             autocommit=True
         )
@@ -29,14 +29,13 @@ def get_db_connection():
         print("❌ DB CONNECTION FAILED:", e)
         return None
 
+
 # =========================
 # BEFORE REQUEST
 # =========================
 @app.before_request
 def before_request():
     g.db = get_db_connection()
-    if g.db is None:
-        print("⚠️ DB not connected")
 
 
 # =========================
@@ -47,6 +46,8 @@ def teardown_request(exception):
     db = getattr(g, 'db', None)
     if db:
         db.close()
+
+
 # =========================
 # CONTEXT PROCESSOR
 # =========================
@@ -88,7 +89,11 @@ def home():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
-    
+
+
+# =========================
+# RENDER ENTRY POINT
+# =========================
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
