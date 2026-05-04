@@ -53,9 +53,13 @@ def manage_staff():
         email = request.form.get('email')
         phone = request.form.get('phone')
 
+        if not username or not password or not role:
+            flash('Please fill required fields', 'danger')
+            return redirect(url_for('admin.manage_staff'))
+
         hashed_password = generate_password_hash(password)
 
-        # 📸 IMAGE UPLOAD (100% WORKING)
+        # 📸 IMAGE UPLOAD
         image_file = request.files.get('image')
         filename = "default.png"
 
@@ -68,11 +72,8 @@ def manage_staff():
             image_path = os.path.join(upload_folder, filename)
             image_file.save(image_path)
 
-            print("✅ SAVED:", image_path)
-        else:
-            print("❌ NO IMAGE RECEIVED")
-
         try:
+            # ✅ INSERT USER
             cursor.execute("""
                 INSERT INTO users (username, password_hash, role, name, email, phone, image)
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
@@ -80,22 +81,22 @@ def manage_staff():
 
             user_id = cursor.lastrowid
 
-            # 👨‍⚕️ Doctor insert
+            # ✅ DOCTOR TABLE INSERT
             if role == 'Doctor':
                 specialization = request.form.get('specialization', 'General')
 
                 cursor.execute("""
-                    INSERT INTO doctors (user_id, specialization)
-                    VALUES (%s, %s)
-                """, (user_id, specialization))
+                    INSERT INTO doctors (user_id, specialization, image)
+                    VALUES (%s, %s, %s)
+                """, (user_id, specialization, filename))
 
             g.db.commit()
             flash(f'{role} added successfully!', 'success')
 
         except Exception as e:
             g.db.rollback()
-            print("ERROR:", e)
-            flash('Error occurred.', 'danger')
+            print("❌ ERROR:", e)
+            flash('Error occurred. Check logs.', 'danger')
 
         return redirect(url_for('admin.manage_staff'))
 
@@ -103,7 +104,6 @@ def manage_staff():
     staff = cursor.fetchall()
 
     return render_template('admin_staff.html', staff=staff)
-
 
 # 🧹 DELETE STAFF
 @admin_bp.route('/delete_staff/<int:id>')
